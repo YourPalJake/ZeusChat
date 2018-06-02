@@ -1,0 +1,29 @@
+##########################
+#        ZeusChat        #
+#  Made by: YourPalJake  #
+#   configuration file   #
+##########################
+version: 1.0 #DO NOT CHANGE THIS!
+
+
+join-messages:
+  enabled: true
+  default:
+    priority: 0 #Lowest priority = 0
+    permission: zeuschat.join.default
+    message: &a+ &7%p #Variable %p is playername
+  admin:
+    priority: 1
+    permission: zeuschat.join.admin
+    message: &6> %p has joined <
+
+leave-messages:
+  enabled: true
+  default:
+    priority: 0
+    permission: zeuschat.leave.default
+    message: &c- &7%p
+  admin:
+    priority: 1
+    permission: zeuschat.leave.admin
+    message: &6> %p has left <

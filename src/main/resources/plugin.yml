@@ -1,0 +1,5 @@
+name: ZeusChat
+author: YourPalJake
+main: me.yourpaljake.zeuschat.ZeusChat
+version: 1.0
+depend: [AthosLibrary]
