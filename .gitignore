@@ -3,7 +3,7 @@
 
 # IntelliJ
 out/
-.idea/
+.idea/dictionaries/
 *.iml
 *.iws
 target/
