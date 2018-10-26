@@ -33,6 +33,10 @@ public final class FileManager {
         }
     }
 
+    public static void reloadConfig(){
+        configFile = YamlConfiguration.loadConfiguration(cfile);
+    }
+
     private static void copy(InputStream in, File file) {
         try {
             OutputStream out = new FileOutputStream(file);

@@ -5,22 +5,34 @@
 ##########################
 version: 1.0
 
-
 chatchannels:
+  #If set to false then this module won't enable
   enabled: true
+  #If set to true, the player can toggle even while he/she
+  #allready has another channel toggled
+  #NOTE if the scenario above happens, the player will receive a message
+  #saying that he/she switched from a channel to another instead of the regular
+  #toggled message
+  forcetoggle: false
   channels:
+    #The name of the ChatChannel
     staffchat:
+      #If this prefix is put before a message then it will automatically
+      #say the message in the specified ChatChannel
       prefix: '@'
       format: '&4&lStaffChat &c%player% &8&l» &r'
+      #Should players be able to format their messages in color
       color: true
       permissions:
+        #Required to read any of the messages
         readpermission: zeuschat.staffchat.read
+        #Required to use the command and talk in the ChatChannel
         writepermission: zeuschat.staffchat.write
+        #Required to talk in color in the ChatChannel
         colorpermission: zeuschat.staffchat.color
       command:
-        #Requires the write permission
         name: 'staffchat'
         description: Staffchat command
-        usage: '/staffchat <toggle|message>'
+        usage: '/staffchat <toggle|say>'
         aliases:
           - 'sv'
