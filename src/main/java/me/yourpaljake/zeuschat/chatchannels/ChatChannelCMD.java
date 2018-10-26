@@ -50,14 +50,21 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
                             Player target = Bukkit.getPlayer(args[1]);
                             if(target == null){sender.sendMessage(ChatColor.RED + "Invalid player!"); return false; }
                             ChatChannel currentChatChannel = chatChannelsModule.getToggled(target); //TODO fix NPE
-                            if(currentChatChannel == null || currentChatChannel != chatChannel){
-                                if(chatChannelsModule.setToggled(target, chatChannel)) {
-                                    Bukkit.getLogger().info(ChatColor.GREEN + "Successfully toggled " + target.getName() + " to " + chatChannel.getName());
+                            if(currentChatChannel != null){
+                                if(currentChatChannel != chatChannel) {
+                                    if (chatChannelsModule.setToggled(target, chatChannel)) {
+                                        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully toggled " + target.getName() + " to " + chatChannel.getName());
+                                        break;
+                                    }
+                                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Specified player has no permissions to this chatchannel");
+                                }else{
+                                    chatChannelsModule.setToggled(target, null);
+                                    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully toggled " + target.getName() + " off");
                                     break;
                                 }
-                                Bukkit.getLogger().info(ChatColor.RED + "Specified player has no permissions to this chatchannel");
                             }else{
-                                chatChannelsModule.setToggled(target, null);
+                                chatChannelsModule.setToggled(target, chatChannel);
+                                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully toggled " + target.getName() + " on to " + chatChannel.getName());
                                 break;
                             }
                         }
@@ -86,7 +93,7 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
                 case "toggle":
                     if(args.length == 1){
                         ChatChannel currentChatChannel = chatChannelsModule.getToggled(p); //TODO fix NPE
-                        if(currentChatChannel == null || currentChatChannel != chatChannel){
+                        if(currentChatChannel != chatChannel){
                             if(chatChannelsModule.isForceToggle()) {
                                 chatChannelsModule.setToggled(p, chatChannel);
                                 break;
@@ -104,15 +111,22 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
                                 return false;
                             }
                             ChatChannel currentChatChannel = chatChannelsModule.getToggled(target);
-                            if (currentChatChannel == null || currentChatChannel != chatChannel) {
-                                if (chatChannelsModule.setToggled(target, chatChannel)) {
-                                    //TODO send player successfully toggled other to on
+                            if(currentChatChannel != null){
+                                if(currentChatChannel != chatChannel) {
+                                    if (chatChannelsModule.setToggled(target, chatChannel)) {
+                                        //TODO send player successfully toggled other to the current
+                                        break;
+                                    }
+                                    //TODO send sender specified player has no permission to this channel message
+                                    return false;
+                                }else{
+                                    chatChannelsModule.setToggled(target, null);
+                                    //TODO send sender successfully toggled off
                                     break;
                                 }
-                                //TODO send sender specified player has no permission to this channel message
-                            } else {
-                                chatChannelsModule.setToggled(target, null);
-                                //TODO send player successfully toggled other to off
+                            }else{
+                                chatChannelsModule.setToggled(target, chatChannel);
+                                //TODO send target successfully toggled on
                                 break;
                             }
                         }
