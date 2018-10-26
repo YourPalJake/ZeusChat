@@ -24,8 +24,8 @@ public class ChatChannels implements IModule {
     public boolean loadModule(Plugin plugin){
         configSect = FileManager.getConfig().getConfigurationSection("chatchannels");
         if(!configSect.getBoolean("enabled")) return false;
-        for (String chatChannelName : configSect.getConfigurationSection("chatchannels").getKeys(false)) {
-            ConfigurationSection chatChannelConfigSect = configSect.getConfigurationSection("chatchannels." + chatChannelName);
+        for (String chatChannelName : configSect.getConfigurationSection("channels").getKeys(false)) {
+            ConfigurationSection chatChannelConfigSect = configSect.getConfigurationSection("channels." + chatChannelName);
             ChatChannel chatChannel = new ChatChannel(chatChannelName
                     , chatChannelConfigSect.getString("prefix")
                     , chatChannelConfigSect.getString("playerformat")
@@ -36,7 +36,7 @@ public class ChatChannels implements IModule {
                     , chatChannelConfigSect.getString("permissions.colorpermission")
                     , chatChannelConfigSect.getBoolean("color")
                     , chatChannelConfigSect.getBoolean("logtoconsole")
-                    , chatChannelConfigSect.getConfigurationSection("commmand")
+                    , chatChannelConfigSect.getConfigurationSection("command")
                     , plugin);
             chatChannels.put(chatChannelName, chatChannel);
             prefixes.put(chatChannelConfigSect.getString("prefix"), chatChannel);

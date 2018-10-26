@@ -1,9 +1,11 @@
 package me.yourpaljake.zeuschat.chatchannels;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.yourpaljake.zeuschat.ZeusChat;
 import me.yourpaljake.zeuschat.api.events.ChatChannelMessageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -55,7 +57,7 @@ public class ChatChannel {
                     , commandSection.getStringList("aliases")
                     , plugin
                     ,this);
-            command.register();
+            ZeusChat.getCommandMap().register(commandSection.getString("name"), this.command);
         }else this.command = null; //Since its disabled in the config
     }
 
@@ -65,7 +67,7 @@ public class ChatChannel {
      */
     public void unload(){
         if(command != null) { //Its null when the command is disabled in the config
-            command.unregister();
+            ZeusChat.getCommandMap().getCommand(command.getName()).unregister(ZeusChat.getCommandMap());
         }
     }
 
@@ -161,7 +163,7 @@ public class ChatChannel {
                         player.sendMessage(translatedPlayerFormat + translatedMessage);
                     }
                 }
-                if(logToConsole) Bukkit.getLogger().info(translatedPlayerFormat + translatedMessage);
+                if(logToConsole) Bukkit.getConsoleSender().sendMessage(translatedPlayerFormat + translatedMessage);
                 return;
             }
             //Call event for API
@@ -174,7 +176,7 @@ public class ChatChannel {
                     player.sendMessage(translatedPlayerFormat + message);
                 }
             }
-            if(logToConsole) Bukkit.getLogger().info(translatedPlayerFormat + message);
+            if(logToConsole) Bukkit.getConsoleSender().sendMessage(translatedPlayerFormat + message);
         }
     }
 
@@ -186,6 +188,6 @@ public class ChatChannel {
                 player.sendMessage(translatedFormat + translatedMessage);
             }
         }
-        if(logToConsole) Bukkit.getLogger().info(translatedFormat + translatedMessage);
+        if(logToConsole) Bukkit.getConsoleSender().sendMessage(translatedFormat + translatedMessage);
     }
 }

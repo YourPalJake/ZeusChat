@@ -1,5 +1,6 @@
 package me.yourpaljake.zeuschat;
 
+import me.yourpaljake.zeuschat.events.PlayerChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.Plugin;
@@ -26,25 +27,16 @@ public final class ZeusChat extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
         Metrics metrics = new Metrics(this);
+        FileManager.setup(this);
         fetchCommandMap();
         moduleRegistry = new ModuleRegistry(this);
         moduleRegistry.loadModules();
+        registerEvents();
     }
 
     @Override
     public void onDisable(){
         moduleRegistry.unloadModules();
-    }
-
-    /**
-     * Get the moduleRegistry
-     * NOTE for 3rd party plugins use the ZeusChatAPI
-     * class to grab the ModuleRegistry
-     *
-     * @return The moduleRegistry instance
-     */
-    public static ModuleRegistry getModuleRegistry() {
-        return moduleRegistry;
     }
 
     /**
@@ -60,6 +52,21 @@ public final class ZeusChat extends JavaPlugin {
             Bukkit.getLogger().warning("Failed to fetch commandMap, disabling....");
             Bukkit.getPluginManager().disablePlugin(this);
         }
+    }
+
+    private void registerEvents(){
+        Bukkit.getPluginManager().registerEvents(new PlayerChatEvent(), this);
+    }
+
+    /**
+     * Get the moduleRegistry
+     * NOTE for 3rd party plugins use the ZeusChatAPI
+     * class to grab the ModuleRegistry
+     *
+     * @return The moduleRegistry instance
+     */
+    public static ModuleRegistry getModuleRegistry() {
+        return moduleRegistry;
     }
 
     /**

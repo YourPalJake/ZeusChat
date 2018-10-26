@@ -3,17 +3,17 @@ package me.yourpaljake.zeuschat.chatchannels;
 import me.yourpaljake.zeuschat.ZeusChat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatChannelCMD extends Command implements PluginIdentifiableCommand {
+public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableCommand {
 
     private ChatChannel chatChannel;
     private Plugin plugin;
@@ -30,10 +30,14 @@ public class ChatChannelCMD extends Command implements PluginIdentifiableCommand
     public boolean execute(CommandSender sender, String label, String[] args) {
         if(!(sender instanceof Player)){
             if(sender instanceof ConsoleCommandSender){
+                if(args.length == 0) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.usageMessage));
+                    return false;
+                }
                 switch (args[0]){
                     case "say":
                         StringBuilder stringBuilder = new StringBuilder();
-                        for (int i=1; i <= args.length; i++){
+                        for (int i=1; i < args.length; i++){
                             stringBuilder.append(args[i]).append(" ");
                         }
                         chatChannel.sendMessage("CONSOLE", stringBuilder.toString().trim());
@@ -45,7 +49,7 @@ public class ChatChannelCMD extends Command implements PluginIdentifiableCommand
                         }else{
                             Player target = Bukkit.getPlayer(args[1]);
                             if(target == null){sender.sendMessage(ChatColor.RED + "Invalid player!"); return false; }
-                            ChatChannel currentChatChannel = chatChannelsModule.getToggled(target);
+                            ChatChannel currentChatChannel = chatChannelsModule.getToggled(target); //TODO fix NPE
                             if(currentChatChannel == null || currentChatChannel != chatChannel){
                                 if(chatChannelsModule.setToggled(target, chatChannel)) {
                                     Bukkit.getLogger().info(ChatColor.GREEN + "Successfully toggled " + target.getName() + " to " + chatChannel.getName());
@@ -67,17 +71,21 @@ public class ChatChannelCMD extends Command implements PluginIdentifiableCommand
         }
         Player p = (Player)sender;
         if(p.hasPermission(chatChannel.getWritePermission())){
+            if(args.length == 0){
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', this.usageMessage));
+                return false;
+            }
             switch (args[0]){
                 case "say":
                     StringBuilder stringBuilder = new StringBuilder();
-                    for (int i=1; i <= args.length; i++){
+                    for (int i=1; i < args.length; i++){
                         stringBuilder.append(args[i]).append(" ");
                     }
                     chatChannel.sendMessage(p, stringBuilder.toString().trim());
                     break;
                 case "toggle":
                     if(args.length == 1){
-                        ChatChannel currentChatChannel = chatChannelsModule.getToggled(p);
+                        ChatChannel currentChatChannel = chatChannelsModule.getToggled(p); //TODO fix NPE
                         if(currentChatChannel == null || currentChatChannel != chatChannel){
                             if(chatChannelsModule.isForceToggle()) {
                                 chatChannelsModule.setToggled(p, chatChannel);
@@ -127,20 +135,6 @@ public class ChatChannelCMD extends Command implements PluginIdentifiableCommand
      */
     public Plugin getPlugin(){
         return plugin;
-    }
-
-    /**
-     * To register the command in the commandMap
-     */
-    void register(){
-        this.register(ZeusChat.getCommandMap());
-    }
-
-    /**
-     * To unregister the command in the commandMap
-     */
-    void unregister(){
-        this.unregister(ZeusChat.getCommandMap());
     }
 
     @Override

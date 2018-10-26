@@ -24,9 +24,11 @@ public class PlayerChatEvent implements Listener {
             String prefix = splitMessage[0];
             ChatChannel chatChannel = chatChannelsModule.getChatChannelByPrefix(prefix);
             if(chatChannel != null){
-                chatChannel.sendMessage(p, event.getMessage().replaceFirst(prefix, "").trim());
-                event.setCancelled(true);
-                return;
+                if(p.hasPermission(chatChannel.getWritePermission())) {
+                    chatChannel.sendMessage(p, event.getMessage().replaceFirst(prefix, "").trim());
+                    event.setCancelled(true);
+                    return;
+                }
             }
             if (chatChannelsModule.isToggled(p)) {
                 chatChannelsModule.getToggled(p).sendMessage(p, event.getMessage());

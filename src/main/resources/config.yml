@@ -26,14 +26,14 @@ chatchannels:
       prefix: '@'
       #This is the format for if a player send a message.
       #NOTE this one does use PlaceholderAPI
-      playerformat: '&4&lStaffChat &c%player% &8&l» &r'
+      playerformat: '&4&lStaffChat &c%player_name% &8&l» &r'
       #This is the format for if a plugin/console send a message.
       #NOTE this one doesn't use PlaceholderAPI and shall not translate those placeholders
       format: '&4&lStaffChat &c{sender} &8&l» &r'
       #Should players be able to format their messages in color
       color: true
       #Should the console also receive messages said in this channel?
-      #NOTE this may or may not make the console look messy because of the colors
+      #NOTE this may or may not make the console look messy
       logtoconsole: false
       permissions:
         #Required to read any of the messages
@@ -49,9 +49,10 @@ chatchannels:
         #NOTE this means that the only way of speaking in the channel is
         #by using the prefix. This will also remove the ability to toggle
         #ingame but can still be done by the plugin or another plugin!
+        #Also by doing this the console won't be able to talk anymore!
         enabled: true
         name: 'staffchat'
         description: Staffchat command
         usagemessage: '&c/staffchat <toggle|say> [player|message]'
         aliases:
-          - 'sv'
+          - 'sc'
