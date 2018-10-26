@@ -19,11 +19,11 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
     private Plugin plugin;
     private ChatChannels chatChannelsModule;
 
-    ChatChannelCMD(String name, String description, String usageMessage, List<String> aliases, Plugin plugin, ChatChannel chatChannel){
+    ChatChannelCMD(String name, String description, String usageMessage, List<String> aliases, Plugin plugin, ChatChannel chatChannel, ChatChannels chatChannelsModule){
         super(name, description, usageMessage, aliases);
         this.plugin = plugin;
         this.chatChannel = chatChannel;
-        this.chatChannelsModule = ZeusChat.getModuleRegistry().getChatChannelsModule();
+        this.chatChannelsModule = chatChannelsModule;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
         if(!(sender instanceof Player)){
             if(sender instanceof ConsoleCommandSender){
                 if(args.length == 0) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.usageMessage));
+                    ZeusChat.getZLogger().log(false, this.usageMessage);
                     return false;
                 }
                 switch (args[0]){
@@ -44,36 +44,40 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
                         break;
                     case "toggle":
                         if(args.length == 1){
-                            sender.sendMessage(ChatColor.RED + "Console cannot be toggled to chatchannels!");
+                            ZeusChat.getZLogger().log(false, "&cConsole cannot get toggled to chatchannels!");
                             return false;
                         }else{
                             Player target = Bukkit.getPlayer(args[1]);
-                            if(target == null){sender.sendMessage(ChatColor.RED + "Invalid player!"); return false; }
+                            if(target == null){
+                                sender.sendMessage(ChatColor.RED + "Invalid player!");
+                                ZeusChat.getZLogger().log(false, "&cInvalid player!");
+                                return false;
+                            }
                             if(chatChannelsModule.isToggled(target)) {
                                 ChatChannel currentChatChannel = chatChannelsModule.getToggled(target);
                                 if (currentChatChannel != chatChannel) {
                                     if (chatChannelsModule.setToggled(target, chatChannel)) {
-                                        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully toggled " + target.getName() + " to " + chatChannel.getName());
+                                        ZeusChat.getZLogger().log(false, "&aSuccessfully toggled " + target.getName() + " from " + currentChatChannel.getName() + " to " + chatChannel.getName());
                                         break;
                                     }
-                                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Specified player has no permissions to this chatchannel");
+                                    ZeusChat.getZLogger().log(false, "&cSpecified player has no permission to this chatchannel!");
                                     return false;
                                 } else {
                                     chatChannelsModule.setToggled(target, null);
-                                    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully toggled " + target.getName() + " off");
+                                    ZeusChat.getZLogger().log(false, "&aSuccessfully toggled " + target.getName() + " off from " + chatChannel.getName());
                                     break;
                                 }
                             }else {
                                 if(chatChannelsModule.setToggled(target, chatChannel)) {
-                                    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully toggled " + target.getName() + " on to " + chatChannel.getName());
+                                    ZeusChat.getZLogger().log(false, "&aSuccessfully toggled " + target.getName() + " on to " + chatChannel.getName());
                                     break;
                                 }
-                                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Specified player has no permissions to this chatchannel");
+                                ZeusChat.getZLogger().log(false, "&cSpecified player has no permission to this chatchannel!");
                                 return false;
                             }
                         }
                     default:
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.usageMessage));
+                        ZeusChat.getZLogger().log(false, this.usageMessage);
                         return false;
                 }
                 return true;
@@ -105,12 +109,15 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
                                 }
                                 //TODO send already toggled to other channel message
                                 return false;
+                            }else{
+                                chatChannelsModule.setToggled(p, null);
+                                break;
                             }
                         }
                         chatChannelsModule.setToggled(p, chatChannel);
                         break;
                     }else{
-                        if(p.hasPermission(chatChannel.getToggleotherPermission())) {
+                        if(p.hasPermission(chatChannel.getToggleOtherPermission())) {
                             Player target = Bukkit.getPlayer(args[1]);
                             if (target == null) {
                                 //TODO send sender invalid player message
@@ -168,13 +175,13 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-        if(args.length == 0){
+        if(args[0].equals("")){
             List<String> tabCompleteList = new ArrayList<>();
             tabCompleteList.add("toggle");
             tabCompleteList.add("say");
             return tabCompleteList;
         }
-        if(args.length == 2 && args[0].equals("toggle") && sender.hasPermission(chatChannel.getToggleotherPermission())){
+        if(args.length == 2 && args[0].equals("toggle") && sender.hasPermission(chatChannel.getToggleOtherPermission())){
             List<String> playerNames = new ArrayList<>();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 playerNames.add(player.getName());

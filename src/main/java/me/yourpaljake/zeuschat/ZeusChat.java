@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public final class ZeusChat extends JavaPlugin {
 
+    private static ZLogger zLogger;
     private static ModuleRegistry moduleRegistry;
     private static CommandMap commandMap; //For internal uses.
 
@@ -28,6 +29,9 @@ public final class ZeusChat extends JavaPlugin {
         }
         Metrics metrics = new Metrics(this);
         FileManager.setup(this);
+        zLogger = new ZLogger();
+        zLogger.log(true, "&fLogger initialized!");
+        zLogger.debug("&fDebug mode &aon");
         fetchCommandMap();
         moduleRegistry = new ModuleRegistry(this);
         moduleRegistry.loadModules();
@@ -47,6 +51,7 @@ public final class ZeusChat extends JavaPlugin {
             final Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
             commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
+            zLogger.debug("&fFetched commandMap");
         }catch (NoSuchFieldException | IllegalAccessException exception){
             exception.printStackTrace();
             Bukkit.getLogger().warning("Failed to fetch commandMap, disabling....");
@@ -67,6 +72,15 @@ public final class ZeusChat extends JavaPlugin {
      */
     public static ModuleRegistry getModuleRegistry() {
         return moduleRegistry;
+    }
+
+    /**
+     * Get the Logger
+     *
+     * @return The zLogger instance
+     */
+    public static ZLogger getZLogger(){
+        return zLogger;
     }
 
     /**

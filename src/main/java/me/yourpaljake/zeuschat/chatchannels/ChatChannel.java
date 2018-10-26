@@ -9,7 +9,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-@SuppressWarnings("all")
 public class ChatChannel {
 
     private String name;
@@ -19,7 +18,7 @@ public class ChatChannel {
 
     private String readPermission;
     private String writePermission;
-    private String toggleotherPermission;
+    private String toggleOtherPermission;
     private String colorPermission;
 
     private boolean color;
@@ -27,17 +26,19 @@ public class ChatChannel {
 
     private ChatChannelCMD command;
 
+
     public ChatChannel(String name
             , String prefix
             , String playerFormat
             , String format
             , String readPermission
             , String writePermission
-            , String toggleotherPermission
+            , String toggleOtherPermission
             , String colorPermission
             , boolean color
             , boolean logToConsole
             , ConfigurationSection commandSection
+            , ChatChannels chatChannelsModule
             , Plugin plugin){
         this.name = name;
         this.prefix = prefix;
@@ -45,7 +46,7 @@ public class ChatChannel {
         this.format = format;
         this.readPermission = readPermission;
         this.writePermission = writePermission;
-        this.toggleotherPermission = toggleotherPermission;
+        this.toggleOtherPermission = toggleOtherPermission;
         this.colorPermission = colorPermission;
         this.color = color;
         this.logToConsole = logToConsole;
@@ -55,7 +56,8 @@ public class ChatChannel {
                     , commandSection.getString("usagemessage")
                     , commandSection.getStringList("aliases")
                     , plugin
-                    ,this);
+                    ,this
+                    , chatChannelsModule);
             ZeusChat.getCommandMap().register(commandSection.getString("name"), this.command);
         }else this.command = null; //Since its disabled in the config
     }
@@ -116,12 +118,12 @@ public class ChatChannel {
     }
 
     /**
-     * get the toggleotherPermission
+     * get the toggleOtherPermission
      *
-     * @return toggleotherPermission
+     * @return toggleOtherPermission
      */
-    public String getToggleotherPermission(){
-        return toggleotherPermission;
+    public String getToggleOtherPermission(){
+        return toggleOtherPermission;
     }
 
     /**

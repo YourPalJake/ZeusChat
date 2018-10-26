@@ -2,6 +2,7 @@ package me.yourpaljake.zeuschat.chatchannels;
 
 import me.yourpaljake.zeuschat.FileManager;
 import me.yourpaljake.zeuschat.IModule;
+import me.yourpaljake.zeuschat.ZeusChat;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public class ChatChannels implements IModule {
         configSect = FileManager.getConfig().getConfigurationSection("chatchannels");
         if(!configSect.getBoolean("enabled")) return false;
         for (String chatChannelName : configSect.getConfigurationSection("channels").getKeys(false)) {
+            ZeusChat.getZLogger().debug("&fLoading chatchannel: " + chatChannelName);
             ConfigurationSection chatChannelConfigSect = configSect.getConfigurationSection("channels." + chatChannelName);
             ChatChannel chatChannel = new ChatChannel(chatChannelName
                     , chatChannelConfigSect.getString("prefix")
@@ -32,16 +34,18 @@ public class ChatChannels implements IModule {
                     , chatChannelConfigSect.getString("format")
                     , chatChannelConfigSect.getString("permissions.readpermission")
                     , chatChannelConfigSect.getString("permissions.writepermission")
-                    , chatChannelConfigSect.getString("permissions.toggleotherPermission")
+                    , chatChannelConfigSect.getString("permissions.toggleotherpermission")
                     , chatChannelConfigSect.getString("permissions.colorpermission")
                     , chatChannelConfigSect.getBoolean("color")
                     , chatChannelConfigSect.getBoolean("logtoconsole")
                     , chatChannelConfigSect.getConfigurationSection("command")
+                    , this
                     , plugin);
             chatChannels.put(chatChannelName, chatChannel);
             prefixes.put(chatChannelConfigSect.getString("prefix"), chatChannel);
         }
         forceToggle = configSect.getBoolean("forcetoggle");
+        ZeusChat.getZLogger().debug("&fChatChannels module loaded");
         return true;
     }
 
@@ -149,7 +153,6 @@ public class ChatChannels implements IModule {
     public boolean setToggled(UUID uuid, ChatChannel chatChannel){
         if(chatChannel != null){
             if(!Bukkit.getServer().getPlayer(uuid).hasPermission(chatChannel.getWritePermission())) return false;
-            if(toggled.get(uuid).equals(chatChannel)) return false;
             if(toggled.containsKey(uuid) && forceToggle){
                 toggled.remove(uuid);
                 toggled.put(uuid, chatChannel);
@@ -178,7 +181,6 @@ public class ChatChannels implements IModule {
     public boolean setToggled(Player player, ChatChannel chatChannel){
         if(chatChannel != null){
             if(!player.hasPermission(chatChannel.getWritePermission())) return false;
-            if(toggled.get(player.getUniqueId()).equals(chatChannel)) return false;
             if(toggled.containsKey(player.getUniqueId()) && forceToggle){
                 toggled.remove(player.getUniqueId());
                 toggled.put(player.getUniqueId(), chatChannel);
@@ -187,6 +189,7 @@ public class ChatChannels implements IModule {
             }
             toggled.put(player.getUniqueId(), chatChannel);
             //TODO Send toggle on message
+            return true;
         }else{
             if(toggled.containsKey(player.getUniqueId())){
                 toggled.remove(player.getUniqueId());

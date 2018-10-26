@@ -10,16 +10,18 @@ public class ModuleRegistry {
 
     private List<IModule> enabledModules = new ArrayList<>();
 
-    private ChatChannels chatChannels;
+    private ChatChannels chatChannels = new ChatChannels();
 
     private Plugin plugin;
 
     ModuleRegistry(Plugin plugin){
         this.plugin = plugin;
+        ZeusChat.getZLogger().debug("&fModuleRegistry initialized");
     }
     void loadModules(){
+        ZeusChat.getZLogger().log(true, "Loading modules...");
         //ChatChannels
-        chatChannels = new ChatChannels();
+        ZeusChat.getZLogger().debug("&fLoading ChatChannels module");
         if(chatChannels.loadModule(plugin)) enabledModules.add(chatChannels);
     }
 

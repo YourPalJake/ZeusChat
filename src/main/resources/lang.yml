@@ -1,0 +1,17 @@
+##########################
+#        ZeusChat        #
+#  Made by: YourPalJake  #
+#      language file     #
+##########################
+version: 1.0
+
+
+
+core:
+  no-permission: '&cYou have no permission to perform this'
+
+
+chatchannels:
+
+
+

@@ -8,6 +8,13 @@ version: 1.0
 #My recommendations are that you install the Player placeholder pack from
 #PlaceholderAPI its ecloud
 
+core-settings:
+  #Should the logs contain color
+  log-color: true
+  #Should I debug my actions(Helps to catch bugs)
+  #I advice to have color on when your debugging!
+  debug: false
+
 chatchannels:
   #If set to false then this module won't enable
   enabled: true
