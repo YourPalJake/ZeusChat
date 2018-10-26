@@ -5,7 +5,6 @@ import me.yourpaljake.zeuschat.ZeusChat;
 import me.yourpaljake.zeuschat.api.events.ChatChannelMessageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

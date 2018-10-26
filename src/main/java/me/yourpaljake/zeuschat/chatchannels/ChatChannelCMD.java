@@ -23,7 +23,7 @@ public class ChatChannelCMD extends BukkitCommand implements PluginIdentifiableC
         super(name, description, usageMessage, aliases);
         this.plugin = plugin;
         this.chatChannel = chatChannel;
-        this.chatChannelsModule = ZeusChat.getModuleRegistry().getChatChannels();
+        this.chatChannelsModule = ZeusChat.getModuleRegistry().getChatChannelsModule();
     }
 
     @Override

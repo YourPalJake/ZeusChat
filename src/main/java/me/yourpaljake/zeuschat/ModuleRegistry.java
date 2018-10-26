@@ -114,7 +114,7 @@ public class ModuleRegistry {
      *
      * @return ChatChannels module instance, returns null if disabled
      */
-    public ChatChannels getChatChannels(){
+    public ChatChannels getChatChannelsModule(){
         if(enabledModules.contains(chatChannels)) return chatChannels;
         return null;
     }

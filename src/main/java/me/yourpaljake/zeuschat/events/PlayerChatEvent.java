@@ -13,7 +13,7 @@ public class PlayerChatEvent implements Listener {
     private ChatChannels chatChannelsModule;
 
     public PlayerChatEvent(){
-        chatChannelsModule = ZeusChat.getModuleRegistry().getChatChannels();
+        chatChannelsModule = ZeusChat.getModuleRegistry().getChatChannelsModule();
     }
 
     @EventHandler

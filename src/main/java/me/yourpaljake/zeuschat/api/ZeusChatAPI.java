@@ -12,7 +12,7 @@ public class ZeusChatAPI {
     public ZeusChatAPI(Plugin plugin){
         ZeusChat.hookAPI(plugin);
         moduleRegistry = ZeusChat.getModuleRegistry();
-        chatChannels = moduleRegistry.getChatChannels();
+        chatChannels = moduleRegistry.getChatChannelsModule();
     }
 
     /**
