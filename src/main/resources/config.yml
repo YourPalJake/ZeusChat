@@ -5,6 +5,9 @@
 ##########################
 version: 1.0
 
+#My recommendations are that you install the Player placeholder pack from
+#PlaceholderAPI its ecloud
+
 chatchannels:
   #If set to false then this module won't enable
   enabled: true
@@ -12,27 +15,43 @@ chatchannels:
   #allready has another channel toggled
   #NOTE if the scenario above happens, the player will receive a message
   #saying that he/she switched from a channel to another instead of the regular
-  #toggled message
+  #toggled message, console ignores this value
   forcetoggle: false
   channels:
     #The name of the ChatChannel
     staffchat:
       #If this prefix is put before a message then it will automatically
       #say the message in the specified ChatChannel
+      #NOTE a prefix always requires a space after it to work
       prefix: '@'
-      format: '&4&lStaffChat &c%player% &8&l» &r'
+      #This is the format for if a player send a message.
+      #NOTE this one does use PlaceholderAPI
+      playerformat: '&4&lStaffChat &c%player% &8&l» &r'
+      #This is the format for if a plugin/console send a message.
+      #NOTE this one doesn't use PlaceholderAPI and shall not translate those placeholders
+      format: '&4&lStaffChat &c{sender} &8&l» &r'
       #Should players be able to format their messages in color
       color: true
+      #Should the console also receive messages said in this channel?
+      #NOTE this may or may not make the console look messy because of the colors
+      logtoconsole: false
       permissions:
         #Required to read any of the messages
         readpermission: zeuschat.staffchat.read
         #Required to use the command and talk in the ChatChannel
         writepermission: zeuschat.staffchat.write
+        #Required to toggle other players
+        toggleotherpermission: zeuschat.staffchat.toggleother
         #Required to talk in color in the ChatChannel
         colorpermission: zeuschat.staffchat.color
       command:
+        #If set to false the ChatChannel won't have a command bound to it.
+        #NOTE this means that the only way of speaking in the channel is
+        #by using the prefix. This will also remove the ability to toggle
+        #ingame but can still be done by the plugin or another plugin!
+        enabled: true
         name: 'staffchat'
         description: Staffchat command
-        usage: '/staffchat <toggle|say>'
+        usagemessage: '&c/staffchat <toggle|say> [player|message]'
         aliases:
           - 'sv'

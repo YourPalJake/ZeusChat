@@ -28,11 +28,14 @@ public class ChatChannels implements IModule {
             ConfigurationSection chatChannelConfigSect = configSect.getConfigurationSection("chatchannels." + chatChannelName);
             ChatChannel chatChannel = new ChatChannel(chatChannelName
                     , chatChannelConfigSect.getString("prefix")
+                    , chatChannelConfigSect.getString("playerformat")
                     , chatChannelConfigSect.getString("format")
                     , chatChannelConfigSect.getString("permissions.readpermission")
                     , chatChannelConfigSect.getString("permissions.writepermission")
+                    , chatChannelConfigSect.getString("permissions.toggleotherPermission")
                     , chatChannelConfigSect.getString("permissions.colorpermission")
                     , chatChannelConfigSect.getBoolean("color")
+                    , chatChannelConfigSect.getBoolean("logtoconsole")
                     , chatChannelConfigSect.getConfigurationSection("commmand")
                     , plugin);
             chatChannels.put(chatChannelName, chatChannel);
@@ -44,7 +47,13 @@ public class ChatChannels implements IModule {
 
     @Override
     public boolean unloadModule() {
-        return false;
+        //TODO Store toggles
+        for (ChatChannel chatChannel : chatChannels.values()) {
+            chatChannel.unload();
+            chatChannels.remove(chatChannel.getName());
+            prefixes.remove(chatChannel.getPrefix());
+        }
+        return chatChannels.isEmpty() && prefixes.isEmpty();
     }
 
     @Override
@@ -77,6 +86,15 @@ public class ChatChannels implements IModule {
     public ChatChannel getChatChannelByPrefix(String prefix){
         if(prefixes.containsKey(prefix)) return prefixes.get(prefix);
         return null;
+    }
+
+    /**
+     * See if the forceToggle feature is enabled
+     *
+     * @return forceToggle
+     */
+    public boolean isForceToggle(){
+        return forceToggle;
     }
 
     /**

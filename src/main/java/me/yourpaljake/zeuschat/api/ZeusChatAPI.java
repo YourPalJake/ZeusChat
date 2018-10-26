@@ -6,9 +6,13 @@ import me.yourpaljake.zeuschat.chatchannels.ChatChannels;
 import org.bukkit.plugin.Plugin;
 
 public class ZeusChatAPI {
+    private ModuleRegistry moduleRegistry;
+    private ChatChannels chatChannels;
 
     public ZeusChatAPI(Plugin plugin){
-
+        ZeusChat.hookAPI(plugin);
+        moduleRegistry = ZeusChat.getModuleRegistry();
+        chatChannels = moduleRegistry.getChatChannels();
     }
 
     /**
@@ -17,7 +21,7 @@ public class ZeusChatAPI {
      * @return ModuleRegistry instance
      */
     public ModuleRegistry getModuleRegistry(){
-        return ZeusChat.getModuleRegistry();
+        return moduleRegistry;
     }
 
     /**
@@ -26,7 +30,7 @@ public class ZeusChatAPI {
      * @return ChatChannels Instance, null if disabled
      */
     public ChatChannels getChatChannels(){
-        return ZeusChat.getModuleRegistry().getChatChannels();
+        return chatChannels;
     }
 
 }
