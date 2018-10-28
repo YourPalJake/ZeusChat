@@ -14,6 +14,7 @@ public final class ZeusChat extends JavaPlugin {
     private static ZLogger zLogger;
     private static ModuleRegistry moduleRegistry;
     private static CommandMap commandMap; //For internal uses.
+    private static ZeusChat instance; //For internal/external uses;
 
     private static ArrayList<Plugin> pluginsUsingAPI = new ArrayList<>();
 
@@ -27,6 +28,7 @@ public final class ZeusChat extends JavaPlugin {
             Bukkit.getLogger().warning("+===============================================================+");
             Bukkit.getPluginManager().disablePlugin(this);
         }
+        instance = this;
         Metrics metrics = new Metrics(this);
         FileManager.setup(this);
         zLogger = new ZLogger();
@@ -64,6 +66,15 @@ public final class ZeusChat extends JavaPlugin {
     }
 
     /**
+     * Get the Logger
+     *
+     * @return The zLogger instance
+     */
+    public static ZLogger getZLogger(){
+        return zLogger;
+    }
+
+    /**
      * Get the moduleRegistry
      * NOTE for 3rd party plugins use the ZeusChatAPI
      * class to grab the ModuleRegistry
@@ -75,15 +86,6 @@ public final class ZeusChat extends JavaPlugin {
     }
 
     /**
-     * Get the Logger
-     *
-     * @return The zLogger instance
-     */
-    public static ZLogger getZLogger(){
-        return zLogger;
-    }
-
-    /**
      * Get the bukkitCommandMap
      * NOTE do not use this method in 3rd party plugins
      * as this is only meant for internal uses
@@ -91,6 +93,18 @@ public final class ZeusChat extends JavaPlugin {
      * @return The commandMap instance
      */
     public static CommandMap getCommandMap() { return commandMap; }
+
+    /**
+     * Get the instance of ZeusChat
+     * NOTE this method is only meant for internal uses
+     * or external for example the PlaceholderExpansion
+     * that's required to use placeholders from this plugin.
+     *
+     * @return ZeusChat instance
+     */
+    public static ZeusChat getInstance(){
+        return instance;
+    }
 
     /**
      * Hook with the API to use in your plugin
