@@ -58,8 +58,10 @@ public class ChatChannel {
                     , plugin
                     ,this
                     , chatChannelsModule);
+            ZeusChat.getZLogger().debug("&fRegistering ChatChanelCMD for " + this.getName());
             ZeusChat.getCommandMap().register(commandSection.getString("name"), this.command);
         }else this.command = null; //Since its disabled in the config
+        ZeusChat.getZLogger().debug("&fChatChannel " + this.getName() + " initialized");
     }
 
     /**
@@ -164,7 +166,7 @@ public class ChatChannel {
                         player.sendMessage(translatedPlayerFormat + translatedMessage);
                     }
                 }
-                if(logToConsole) Bukkit.getConsoleSender().sendMessage(translatedPlayerFormat + translatedMessage);
+                if(logToConsole) ZeusChat.getZLogger().log(false, translatedPlayerFormat + translatedMessage);
                 return;
             }
             //Call event for API
@@ -177,7 +179,7 @@ public class ChatChannel {
                     player.sendMessage(translatedPlayerFormat + message);
                 }
             }
-            if(logToConsole) Bukkit.getConsoleSender().sendMessage(translatedPlayerFormat + message);
+            if(logToConsole) ZeusChat.getZLogger().log(false, translatedPlayerFormat + message);
         }
     }
 
@@ -189,6 +191,6 @@ public class ChatChannel {
                 player.sendMessage(translatedFormat + translatedMessage);
             }
         }
-        if(logToConsole) Bukkit.getConsoleSender().sendMessage(translatedFormat + translatedMessage);
+        if(logToConsole) ZeusChat.getZLogger().log(false, translatedFormat + translatedMessage);
     }
 }

@@ -5,13 +5,21 @@
 ##########################
 version: 1.0
 
+##RECOMENDATIONS
 
+##GUIDE
+#By default I will process the message trough PlaceholderAPI by passing it the sender etc
+#but if a message has an annotation containing: target, that means that the player specified by the sender
+#in the command will be passed trough PlaceholderAPI so if you have %player_name% as placeholder instead of
+#it showing the name of the sender it will show the name of the target
 
 core:
-  no-permission: '&cYou have no permission to perform this'
-
+  no-permission: '&cYou have no permission to perform this!'
+  invalid-player: '&cInvalid player!'
 
 chatchannels:
+  chatchannel-toggled-on: '&7You have successfully toggled on &b%zeuschat_chatchannel%'
+  chatchannel-toggled-off: '&7You have successfully toggled off &b%zeuschat_chatchannel%'
 
 
 
